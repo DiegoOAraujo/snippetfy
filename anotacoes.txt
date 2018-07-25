@@ -1,0 +1,86 @@
+nodemon - monitora as alterações nos arquivos e reinicia o servidor node
+npm install -D nodemon
+não será usado em produção
+
+orm
+usar o mysql (instalar se necessário)
+cliente manipulação do mysql, HeidiSQL (https://www.heidisql.com/download.php)
+
+instalar sequelize (ORM)
+npm install sequelize
+npm install sequelize-cli -D
+
+apos instalação executar o comnado: .\node_modules\.bin\sequelize init
+
+isso criará algumas pastas.
+mover models para app
+criar pasta database e mover migrations e seeders para dentro
+
+criar arquivo .sequelizerc
+conteudo:
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve('config', 'database.js'),
+  'models-path': path.resolve('app', 'models'),
+  'seeders-path': path.resolve('database', 'seeders'),
+  'migrations-path': path.resolve('database', 'migrations'),
+};
+
+apagar o arquivo criado dentro de config e criar o arquivo database.js
+conteudo:
+module.exports = {
+  username: 'root',
+  password: null,
+  database: 'snippetfy',
+  host: '127.0.0.1',
+  dialect: 'mysql',
+};
+
+
+arquivo app/models/index.js
+conteudo:
+
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const config = require('../../config/database.js');
+
+const db = {};
+
+const sequelize = new Sequelize(config);
+fs
+  .readdirSync(__dirname)
+  .filter(file => (file.indexOf('.') !== 0) && (file !== path.basename(__filename)) && (file.slice(-3) === '.js'))
+  .forEach((file) => {
+    const model = sequelize.import(path.join(__dirname, file));
+    db[model.name] = model;
+  });
+
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;
+
+//fim conteudo index.js
+
+criando a migration para criar a tabela
+comando: node_modules/.bin/sequelize migration:create --name=create-users
+ajustar conteudo do arquivo criado dentro da pasta migrations
+comando: node_modules/.bin/sequelize db:migrate
+
+se der erro: instalar mysql2 : npm install mysql2
+e rodar o comando db:migrate de novo
+
+criada a tabela
+
+
+models
+para cada tabela, se necessário, criar um model na pasta models
+exemplo: para a tabela users, criar models/user.js

@@ -5,16 +5,20 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+const { User } = require('./app/models');
 
-nunjucks.configure('views', {
+User.create({ name: 'Diego', email: 'diego@diego.com', password: '123456' });
+
+nunjucks.configure(path.resolve('app', 'views'), {
   autoescape: true,
   express: app,
 });
-app.set('view engine', 'njk');
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'njk');
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.render('index');
 });
+
+app.listen(3000);
