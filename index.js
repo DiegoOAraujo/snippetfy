@@ -20,7 +20,7 @@ nunjucks.configure(path.resolve('app', 'views'), {
 app.set('view engine', 'njk');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session(sessionConfig));
-//app.use(flash);
+app.use(flash());
 
 app.use('/', routes);
 
