@@ -10,8 +10,6 @@ module.exports = {
     return res.render('auth/signup');
   },
 
-  // signout(req, res) { },
-
   async register(req, res) {
     const { email } = req.body;
     if (await User.findOne({ where: { email } })) {
@@ -50,6 +48,12 @@ module.exports = {
 
     return req.session.save(() => {
       res.redirect('app/dashboard');
+    });
+  },
+
+  signout(req, res) {
+    return req.session.destroy(() => {
+      res.redirect('/');
     });
   },
 };
