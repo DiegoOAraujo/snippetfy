@@ -7,6 +7,7 @@ const guestMiddleware = require('./middlewares/guest');
 
 const authController = require('./controllers/authController');
 const dashboardController = require('./controllers/dashboardController');
+const categoryController = require('./controllers/categoryController');
 
 routes.use((req, res, next) => {
   res.locals.flashSuccess = req.flash('success');
@@ -21,6 +22,9 @@ routes.use((req, res, next) => {
  * DELETE - adivinha?
  */
 
+/**
+ * auth
+ */
 routes.get('/', guestMiddleware, authController.signin);
 routes.get('/signup', guestMiddleware, authController.signup);
 routes.get('/signout', authController.signout);
@@ -28,9 +32,21 @@ routes.get('/signout', authController.signout);
 routes.post('/register', authController.register);
 routes.post('/authenticate', authController.authenticate);
 
+/**
+ * dashboard
+ */
 routes.use('/app', authMiddleware);
 routes.get('/app/dashboard', dashboardController.index);
 
+
+/**
+ * categories
+ */
+routes.post('/app/categories/create', categoryController.store);
+
+/**
+ * errors
+ */
 // se não encontrar nenhuma das rotas acima vai para erro 404
 routes.use((req, res) => res.render('errors/404'));
 
