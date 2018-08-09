@@ -7,10 +7,10 @@
 
     <section class="snippet-content">
       <div class="actions">
-        <a href="#" class="edit" data-modal-open="#edit-snippet">Editar</a>
+        <a href="#" class="edit" data-modal-open="#edit-snippet"><i class="fas fa-pencil-alt"></i><!--Editar--></a>
 
-        <form action="/app/categories/{{ activeCategory }}/snippets/{{ currentSnippet.id }}?_method=DELETE"" method="POST">
-          <button type="submit">Remover</button>
+        <form action="/app/categories/{{ activeCategory }}/snippets/{{ currentSnippet.id }}?_method=DELETE" method="POST">
+          <button type="submit"><i class="fas fa-trash"></i><!--Remover--></button>
         </form>
       </div>
 
